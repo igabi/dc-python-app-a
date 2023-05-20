@@ -15,8 +15,8 @@ def jobs():
     token = request.headers["Authorization"]
     data = {"token": token}
     protocol = "http"
-    domain = os.getenv("SERVICEB", default="dc-python-app-b-service")
-    port = 5001
+    domain = os.getenv("SERVICEB", default="dc-python-app-b")
+    port = 5000
     path = "auth"
     url = f"{protocol}://{domain}:{port}/{path}"
     result = requests.post(url, data=data).text
