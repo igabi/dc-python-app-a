@@ -26,6 +26,7 @@ RUN --mount=type=cache,target=/var/cache/apt/ \
     build-essential=12.9 \
     vim=2:8.2.2434-3+deb11u1 \
     curl=7.74.0-1.3+deb11u7 \
+    tini=0.19.0-1 \
     && rm -f /usr/local/src/* \
     && rm -f /tmp/* \
     && apt-get autoremove -y \
@@ -59,7 +60,11 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 FROM base as application
 
-COPY  . .
+COPY --chown=$USERNAME:$USERNAME . .
+
+RUN chmod +x docker-entrypoint.sh
 
 # Expose the application
+ENTRYPOINT ["/usr/bin/tini", "--", "/workspaces/dc-python-app-a/docker-entrypoint.sh"]
+
 CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
